@@ -10,6 +10,8 @@ import {
 } from "./style";
 
 export default function Films({ filmsArray }: any) {
+  console.log(filmsArray);
+
   if (!filmsArray) return <></>;
 
   return (
