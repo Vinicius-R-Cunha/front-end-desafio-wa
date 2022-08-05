@@ -10,10 +10,12 @@ import {
 } from "./style";
 
 export default function Films({ filmsArray }: any) {
+  if (!filmsArray) return <></>;
+
   return (
     <Container>
       <CentralizedDiv>
-        {filmsArray?.map((film: any) => {
+        {filmsArray.map((film: any) => {
           return (
             <Film key={film.id}>
               <Banner src={film.movie_banner} alt="" />
