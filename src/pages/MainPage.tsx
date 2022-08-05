@@ -30,6 +30,7 @@ export default function MainPage() {
       getFilmQuantity();
 
       setLoading(false);
+      console.log(response);
       if (response.status === 200) {
         setFilmsArray(response.data);
 
