@@ -45,6 +45,7 @@ export default function MainPage() {
         return;
       }
     }
+    // eslint-disable-next-line
   }, [currentPage, filmsQuantity]);
 
   if (loading) {
