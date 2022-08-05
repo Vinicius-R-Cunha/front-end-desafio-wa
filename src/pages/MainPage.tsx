@@ -1,13 +1,66 @@
+import { useEffect, useState } from "react";
+import Header from "../components/Header";
+import Films from "../components/Films";
+import Pages from "../components/Pages";
+import Loading from "../components/Loading";
 import useQuery from "../utils/useQuery";
-import { useNavigate } from "react-router-dom";
+import * as api from "../services/api";
 
 export default function MainPage() {
-  const navigate = useNavigate();
-  // navigate({ pathname: "/", search: "?page=2" })
-
   const query = useQuery();
 
-  console.log(query.get("page"));
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filmsArray, setFilmsArray] = useState([]);
+  const [filmsQuantity, setFilmsQuantity] = useState(0);
+  const [loading, setLoading] = useState(false);
 
-  return <h1>main page</h1>;
+  useEffect(() => {
+    if (query.get("page") === null) {
+      setCurrentPage(1);
+    } else {
+      const page = query!.get("page") as string;
+      setCurrentPage(+page);
+    }
+
+    getFilmsData();
+
+    async function getFilmsData() {
+      setLoading(true);
+      const response = await api.getPageFilms(currentPage);
+      getFilmQuantity();
+
+      setLoading(false);
+      if (response.status === 200) {
+        setFilmsArray(response.data);
+
+        return;
+      }
+    }
+
+    async function getFilmQuantity() {
+      const response = await api.getAllFilms();
+      if (response.status === 200) {
+        setFilmsQuantity(response.data.length);
+
+        return;
+      }
+    }
+  }, [currentPage, filmsQuantity]);
+
+  if (loading) {
+    return (
+      <>
+        <Header loading={loading} setFilmsQuantity={setFilmsQuantity} />
+        <Loading />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Header loading={loading} setFilmsQuantity={setFilmsQuantity} />
+      <Films filmsArray={filmsArray} />
+      <Pages filmsQuantity={filmsQuantity} setCurrentPage={setCurrentPage} />
+    </>
+  );
 }

@@ -30,6 +30,7 @@ footer, header, hgroup, menu, nav, section {
 body {
 	line-height: 1;
 	font-family: 'Roboto', sans-serif;
+	background-color: rgb(249,249,249)
 }
 ol, ul {
 	list-style: none;
